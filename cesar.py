@@ -1,58 +1,53 @@
 def cifrar_cesar(texto, desplazamiento):
-    """
-    Cifra texto usando el algoritmo César
-    Convierte todo a minúsculas y maneja desplazamientos grandes
-    """
     texto = texto.lower()
-    texto_cifrado = ""
+    resultado = ""
     
-    # Calcular desplazamiento efectivo (módulo 26)
-    desplazamiento_efectivo = desplazamiento % 26
-    if desplazamiento_efectivo == 0:
-        desplazamiento_efectivo = 26
+    # Ajustar desplazamiento si es mayor a 26
+    desplazamiento = desplazamiento % 26
     
     for caracter in texto:
         if caracter.isalpha():
-            base = ord('a')
-            codigo = ord(caracter) - base
-            nuevo_codigo = (codigo + desplazamiento_efectivo) % 26
-            nuevo_caracter = chr(base + nuevo_codigo)
-            texto_cifrado += nuevo_caracter
+            # Convertir a código ASCII y aplicar desplazamiento
+            codigo = ord(caracter)
+            codigo_cifrado = (codigo - ord('a') + desplazamiento) % 26 + ord('a')
+            resultado += chr(codigo_cifrado)
         else:
-            texto_cifrado += caracter
+            # Mantener caracteres no alfabéticos sin cambios
+            resultado += caracter
     
-    return texto_cifrado
+    return resultado
 
 def descifrar_cesar(texto_cifrado, desplazamiento):
-    """
-    Descifra texto cifrado con César
-    """
-    desplazamiento_efectivo = (-desplazamiento) % 26
-    if desplazamiento_efectivo == 0:
-        desplazamiento_efectivo = 26
-    
-    texto = texto_cifrado.lower()
-    texto_descifrado = ""
-    
-    for caracter in texto:
-        if caracter.isalpha():
-            base = ord('a')
-            codigo = ord(caracter) - base
-            nuevo_codigo = (codigo + desplazamiento_efectivo) % 26
-            texto_descifrado += chr(base + nuevo_codigo)
-        else:
-            texto_descifrado += caracter
-    
-    return texto_descifrado
+    # Para descifrar, usamos un desplazamiento negativo
+    return cifrar_cesar(texto_cifrado, -desplazamiento)
 
-# Programa principal - solo se ejecuta si se llama directamente
-if __name__ == "__main__":
-    print("este es cesar.py")
-    texto_original = input("Ingrese el texto a cifrar: ")
-    desplazamiento = int(input("Ingrese el desplazamiento: "))
-
-    texto_cifrado = cifrar_cesar(texto_original, desplazamiento)
-    print(f"Texto cifrado: {texto_cifrado}")
-
+def main():
+    print("=== CIFRADO CÉSAR ===")
+    
+    # Solicitar texto al usuario
+    texto = input("Ingrese el texto: ")
+    
+    # Solicitar desplazamiento (manejar entrada no numérica)
+    while True:
+        try:
+            desplazamiento = int(input("Ingrese el desplazamiento: "))
+            break
+        except ValueError:
+            print("Por favor, ingrese un número válido.")
+    
+    # Cifrar el texto
+    texto_cifrado = cifrar_cesar(texto, desplazamiento)
+    print(f"\nTexto cifrado: {texto_cifrado}")
+    
+    # Descifrar para verificar
     texto_descifrado = descifrar_cesar(texto_cifrado, desplazamiento)
     print(f"Texto descifrado: {texto_descifrado}")
+    
+    # Verificar que el descifrado sea igual al original (en minúsculas)
+    if texto_descifrado == texto.lower():
+        print("✓ El descifrado coincide con el texto original")
+    else:
+        print("✗ Error: El descifrado no coincide")
+
+if __name__ == "__main__":
+    main()
