@@ -14,9 +14,6 @@ import os
 from cesar import cifrar_cesar, descifrar_cesar
 
 def calcular_checksum(data):
-    """
-    Calcula el checksum para el header ICMP
-    """
     checksum = 0
     
     # Asegurar que data tenga longitud par
@@ -38,9 +35,6 @@ def calcular_checksum(data):
     return checksum
 
 def crear_paquete_icmp(id_paquete, secuencia, data):
-    """
-    Crea un paquete ICMP Echo Request
-    """
     # Tipo ICMP (8 = Echo Request), Código (0), Checksum (temporal), ID, Secuencia
     tipo = 8
     codigo = 0
@@ -64,9 +58,6 @@ def crear_paquete_icmp(id_paquete, secuencia, data):
     return paquete_icmp
 
 def enviar_caracteres_icmp(texto, destino, delay=0.5):
-    """
-    Envía cada carácter del texto en un paquete ICMP separado
-    """
     try:
         # Crear socket raw (requiere privilegios de administrador)
         sock = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_ICMP)
